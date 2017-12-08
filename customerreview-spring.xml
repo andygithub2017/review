@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="interceptor" class="review.ReviewCurseWordsFilterInterceptor">
+		<property name="reviewCurseWordsFilter">
+			<bean class="review.filter.ReviewCurseWordsFilterImpl">
+				<property name="curseWords">
+					<list>
+						<value>shit</value>
+						<value>fuck</value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="review" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="interceptorNames">
+			<list>
+				<value>interceptor</value>
+			</list>
+		</property>
+		<property name="target">
+			<bean class="review.ReviewManager"></bean>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+	</bean>
+</beans>
